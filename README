@@ -4,16 +4,18 @@ Note, the browser language can not (generally) be obtained via navigator.languag
 
 The browser language is available in "Accept-language" HTTP header, but this is not directly accessible via javascript.
 
-The plugin utilises a service at http://ajaxhttpheaders.appspot.com which echos back the HTTP request headers in JSONP.
+The plugin makes an ajax request to an url provided by us which must return a json hash with the content of the Accept-Language header. An example would be
 
-I made that as well, and intend to leave it running there in perpetuity (or as long as Google continue to host App Engine for free)
+    {
+        Accept-Language: "es,en;q=0.8,fr;q=0.6"
+    }
 
 The Accept-Language header as defined by http://www.w3.org/Protocols/rfc2616/rfc2616-sec3.html#sec3.10 uses an ISO 639-1 language code. The plugin converts this to an English Language description of the Language (e.g. 'Norwegian'), but also returns the complete value of the header if you need to do further processing.
 
 Example usage:
 
 <script>
-    $.browserLanguage(function( language , acceptHeader ){
-      alert("You have your browser language set to " + language + " and the complete value of the 'Accept-Language' header is " + acceptHeader);
+    $.browserLanguage(my-checking-url, function( languages , acceptHeader ){
+      console.log("You lke these languages " + languages.join(",") + " and the complete value of the 'Accept-Language' header is " + acceptHeader);
     })
 </script>
